@@ -13,6 +13,7 @@ const username = computed(
 <template>
   <v-app-bar color="primary">
     <v-app-bar-nav-icon
+      v-if="isLoggedin"
       color="white"
       @click.stop="store.toggleDrawer()"
     ></v-app-bar-nav-icon>
