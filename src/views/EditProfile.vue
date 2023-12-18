@@ -20,7 +20,26 @@ const user = ref({
 const rules = {
   required: (value) => !!value || "This field is required",
   email: (value) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Invalid email address",
+  !!value.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) || "Invalid email address",
+  max_length: length => {
+    return function (value) {
+      if (value && value.length > length) {
+        return `Value should not be greater than ${length} characters`;
+      }
+      return true;
+    };
+  },
+  phone: value => {
+    const pattern = /^\d+$/;
+    if(!pattern.test (value)){
+      return 'It must be numeric';
+    } 
+
+    if(value.length < 10 || value.length > 10){
+      return 'Phone number must be 10 digits'
+    }
+    return true
+  },
 };
 const menu = ref(false);
 const date = ref(null);
@@ -71,14 +90,16 @@ onBeforeMount(() => {
                 <v-col cols="6">
                   <v-text-field
                     v-model="user.firstName"
-                    :rules="[rules.required]"
+                    :rules="[rules.required,rules.max_length(10)]"
+                    counter="10"
                     label="First Name"
                   />
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     v-model="user.lastName"
-                    :rules="[rules.required]"
+                    :rules="[rules.required,rules.max_length(10)]"
+                    counter="10"
                     label="Last Name"
                   />
                 </v-col>
@@ -93,14 +114,16 @@ onBeforeMount(() => {
                 <v-col cols="6">
                   <v-text-field
                     v-model="user.phoneNumber"
-                    :rules="[rules.required]"
+                    :rules="[rules.required,rules.phone]"
+                    counter="10"
                     label="Phone Number"
                   />
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
                     v-model="user.address"
-                    :rules="[rules.required]"
+                    :rules="[rules.required,rules.max_length(30)]"
+                    counter="30"
                     label="Address"
                   />
                 </v-col>
@@ -120,6 +143,7 @@ onBeforeMount(() => {
                       <v-text-field
                         v-model="user.dob"
                         label="Birthday date"
+                        :rules="[rules.required]"
                         readonly
                         v-bind="props"
                       ></v-text-field>

@@ -1,10 +1,17 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useProfileStore } from "@/store/profile";
 
+const store = useProfileStore();
 const emits = defineEmits(["change"]);
 const userprofile = ref(null);
 const userProfileInput = ref(null);
 
+onMounted(() => {
+  if(store.user?.profileImage){
+    userprofile.value = store.user.profileImage
+  }
+})
 const uploadPicture = (e) => {
   const file = e.target.files[0];
   if (file) {
