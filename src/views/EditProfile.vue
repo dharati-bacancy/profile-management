@@ -122,8 +122,8 @@ onBeforeMount(() => {
                 <v-col cols="12">
                   <v-text-field
                     v-model="user.address"
-                    :rules="[rules.required,rules.max_length(30)]"
-                    counter="30"
+                    :rules="[rules.required,rules.max_length(50)]"
+                    counter="50"
                     label="Address"
                   />
                 </v-col>
@@ -160,7 +160,8 @@ onBeforeMount(() => {
                 <v-col cols="6">
                   <v-text-field
                     v-model="user.educationField"
-                    :rules="[rules.required]"
+                    :rules="[rules.required,rules.max_length(30)]"
+                    counter="30"
                     label="Education Field"
                   />
                 </v-col>
